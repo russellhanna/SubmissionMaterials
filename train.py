@@ -11,14 +11,7 @@ from azureml.core.run import Run
 from azureml.data.dataset_factory import TabularDatasetFactory
 
 
-# TODO: Split data into train and test sets.
 
-### YOUR CODE HERE ###
-x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
-
-### End of my code ###
-
-run = Run.get_context()
 
 def clean_data(data):
     # Dict for cleaning data
@@ -45,6 +38,7 @@ def clean_data(data):
     x_df["poutcome"] = x_df.poutcome.apply(lambda s: 1 if s == "success" else 0)
 
     y_df = x_df.pop("y").apply(lambda s: 1 if s == "yes" else 0)
+    return x_df, y_df
     
 
 def main():
@@ -65,4 +59,9 @@ def main():
     run.log("Accuracy", np.float(accuracy))
 
 if __name__ == '__main__':
+    ds = TabularDatasetFactory.from_delimited_files(path="https://automlsamplenotebookdata.blob.core.windows.net/automl-sample-notebook-data/bankmarketing_train.csv")
+    x,y = clean_data(ds)
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
+    run = Run.get_context()
+
     main()
