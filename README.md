@@ -1,4 +1,4 @@
-# SubmissionMaterials
+ProjectOneAMLcompute
 
 Optimizing an ML Pipeline in Azure
 Overview
